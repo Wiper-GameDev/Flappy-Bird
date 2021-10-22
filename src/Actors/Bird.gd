@@ -50,6 +50,7 @@ func get_rotation_degrees():
 	
 func die():
 	if alive:
+		set_physics_process(false)
 		emit_signal("died")
 		alive = false
 		animated_sprite.stop()
