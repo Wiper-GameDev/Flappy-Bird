@@ -9,4 +9,5 @@ func _ready() -> void:
 
 func _on_DangerArea_body_entered(body: Node) -> void:
 	if body is Bird:
+		body.touched_base = true
 		body.die()
