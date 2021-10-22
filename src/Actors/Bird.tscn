@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://assets/sprites/yellowbird-midflap.png" type="Texture" id=1]
 [ext_resource path="res://assets/sprites/yellowbird-downflap.png" type="Texture" id=2]
@@ -18,7 +18,22 @@ animations = [ {
 radius = 14.8699
 
 [sub_resource type="Animation" id=3]
-resource_name = "idle"
+resource_name = "flap"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("AnimatedSprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ) ]
+}
+
+[sub_resource type="Animation" id=4]
 length = 1.6
 loop = true
 tracks/0/type = "value"
@@ -40,7 +55,6 @@ sleeping = true
 script = ExtResource( 4 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-position = Vector2( 0, -7.59571 )
 frames = SubResource( 1 )
 animation = "flap"
 frame = 2
@@ -49,7 +63,8 @@ frame = 2
 shape = SubResource( 2 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/idle = SubResource( 3 )
+anims/flap = SubResource( 3 )
+anims/idle = SubResource( 4 )
 
 [node name="WingSound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 5 )

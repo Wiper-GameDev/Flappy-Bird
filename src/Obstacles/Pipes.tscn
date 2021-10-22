@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://src/Obstacles/Pipe.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/Obstacles/Pipes.gd" type="Script" id=2]
+[ext_resource path="res://src/Obstacles/Pipe.gd" type="Script" id=3]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 10, 71 )
+
+[node name="Pipes" type="Node2D"]
+position = Vector2( 0, -60 )
+script = ExtResource( 2 )
+
+[node name="Pipe" parent="." groups=[
+"pipes",
+] instance=ExtResource( 1 )]
+position = Vector2( 0, 90 )
+rotation = 3.14159
+script = ExtResource( 3 )
+
+[node name="Pipe2" parent="." groups=[
+"pipes",
+] instance=ExtResource( 1 )]
+position = Vector2( 0, 540 )
+script = ExtResource( 3 )
+
+[node name="ScoreArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ScoreArea"]
+position = Vector2( 0, 315 )
+shape = SubResource( 1 )
+
+[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
+position = Vector2( -0.5, 315.75 )
+scale = Vector2( 2.95, 38.525 )
+
+[connection signal="screen_exited" from="VisibilityNotifier2D" to="." method="_on_screen_exited"]

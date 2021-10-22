@@ -1,6 +1,10 @@
 extends RigidBody2D
 
-export var flap_impulse := 400.0
+class_name Bird
+
+signal died
+
+export var flap_impulse := 350.0
 
 # Called when the node enters the scene tree for the first time.
 onready var animated_sprite : AnimatedSprite = get_node("AnimatedSprite")
@@ -9,23 +13,26 @@ onready var wing_sound: AudioStreamPlayer2D = get_node("WingSound")
 
 
 const ROTATION_MULTIPLIER = 5
+var alive := true
 
-
-var _velocity := Vector2.ZERO
 
 func _ready() -> void:
 	animated_sprite.play("flap")
 	
+	
 
 	
 func _process(delta: float) -> void:
-	if Input.is_action_pressed("flap"):
-		linear_velocity.y = -flap_impulse
-		if wing_sound.playing:
-			wing_sound.stop()
-		wing_sound.play()
-		
-	animated_sprite.rotation_degrees = get_rotation_degrees()
+	if alive:
+		if Input.is_action_pressed("flap"):
+			linear_velocity.y = -flap_impulse
+			if wing_sound.playing:
+				wing_sound.stop()
+			wing_sound.play()
+			
+		animated_sprite.rotation_degrees = get_rotation_degrees()
+	else:
+		animated_sprite.rotation_degrees = 90
 	
 	
 	
@@ -33,4 +40,9 @@ func get_rotation_degrees():
 	return linear_velocity.y * get_physics_process_delta_time() * ROTATION_MULTIPLIER
 
 	
+	
+func die():
+	alive = false
+	animated_sprite.stop()
+	emit_signal("died")
 	

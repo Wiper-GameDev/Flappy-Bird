@@ -8,6 +8,16 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "RigidBody2D",
+"class": "Bird",
+"language": "GDScript",
+"path": "res://src/Actors/Bird.gd"
+} ]
+_global_script_class_icons={
+"Bird": ""
+}
+
 [application]
 
 config/name="Flappy Bird"

@@ -15,7 +15,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 1 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Vector2( 360, 580 ), Vector2( 0, 580 ) ]
+"values": [ Vector2( 0, 0 ), Vector2( -360, 0 ) ]
 }
 
 [sub_resource type="RectangleShape2D" id=2]
@@ -24,7 +24,6 @@ extents = Vector2( 180, 58.9999 )
 [node name="Base" type="StaticBody2D"]
 
 [node name="Sprite" type="Sprite" parent="."]
-position = Vector2( 360, 581 )
 scale = Vector2( 1.07143, 1.07143 )
 texture = ExtResource( 1 )
 
@@ -33,5 +32,5 @@ autoplay = "scroll"
 anims/scroll = SubResource( 1 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( 181, 581 )
+position = Vector2( -180, 0 )
 shape = SubResource( 2 )
