@@ -76,5 +76,3 @@ stream = ExtResource( 6 )
 
 [node name="DieSound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 7 )
-
-[connection signal="finished" from="HitSound" to="." method="_on_HitSound_finished"]

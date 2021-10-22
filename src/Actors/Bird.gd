@@ -26,7 +26,7 @@ func _ready() -> void:
 	
 func _play_sound(sound) -> void:
 	if sound.playing:
-			sound.stop()
+		sound.stop()
 	sound.play()
 
 	
@@ -34,7 +34,9 @@ func _process(delta: float) -> void:
 	if Input.is_action_pressed("flap") && alive:
 		linear_velocity.y = -flap_impulse
 		_play_sound(wing_sound)
+		
 	animated_sprite.rotation_degrees = get_rotation_degrees()
+	
 		
 	if touched_base:
 		animated_sprite.rotation_degrees = 90
@@ -48,8 +50,8 @@ func get_rotation_degrees():
 	
 func die():
 	if alive:
-		alive = false
 		emit_signal("died")
+		alive = false
 		animated_sprite.stop()
 		_play_sound(hit_sound)
 		_play_sound(die_sound)

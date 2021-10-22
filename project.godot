@@ -24,6 +24,10 @@ config/name="Flappy Bird"
 run/main_scene="res://src/Scenes/Level.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+PlayerData="*res://src/data/PlayerData.tscn"
+
 [display]
 
 window/size/width=360

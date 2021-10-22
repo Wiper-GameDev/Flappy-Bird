@@ -13,3 +13,9 @@ func _process(delta: float) -> void:
 
 func _on_screen_exited() -> void:
 	queue_free()
+
+
+func _on_ScoreArea_body_entered(body: Node) -> void:
+	if body is Bird:
+		if body.alive:
+			PlayerData.score += 1
