@@ -12,7 +12,7 @@ func _ready() -> void:
 	$Base/AnimationPlayer.playback_speed = 0.55
 
 func start_game() -> void:
-	$GetReady.visible = false
+	$GetReady.queue_free()
 	$ObstacleSpawner.start()
 	$HUD/Score.visible = true
 	started = true

@@ -23,6 +23,7 @@ _global_script_class_icons={
 config/name="Flappy Bird"
 run/main_scene="res://src/Scenes/Level.tscn"
 config/icon="res://icon.png"
+config/windows_native_icon="res://assets/icon.ico"
 
 [autoload]
 
