@@ -5,6 +5,9 @@ var Obstacle = preload("res://src/Obstacles/Pipes.tscn")
 
 func _ready() -> void:
 	randomize()
+	
+	
+func start() -> void:
 	$Timer.start()
 	
 	
