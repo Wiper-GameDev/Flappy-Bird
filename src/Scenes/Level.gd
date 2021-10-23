@@ -9,6 +9,7 @@ func _ready() -> void:
 	$Bird.connect("died", self, "flash_screen")
 	$HUD/GameOver.visible = false
 	$HUD/Score.visible = false
+	$Base/AnimationPlayer.playback_speed = 0.55
 
 func start_game() -> void:
 	$GetReady.visible = false
