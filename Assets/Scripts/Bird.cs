@@ -39,6 +39,9 @@ public class Bird : MonoBehaviour
 
     void Update()
     {
+        // Don't update anything if bird is dead
+        if (_isDead) return;
+
         // Update the vertical velocity to clamp the fall speed
         RB.velocity = new Vector2(RB.velocity.x, Mathf.Max(RB.velocity.y, -maxFallSpeed));
 
@@ -109,6 +112,8 @@ public class Bird : MonoBehaviour
             _isDead = true;
             _canRotate = false;
             _canFlap = false;
+
+            GameData.Instance.GameOver();
         }
     }
 }

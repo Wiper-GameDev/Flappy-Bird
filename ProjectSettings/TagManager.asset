@@ -9,10 +9,10 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Bird
   - Water
   - UI
-  - Ground
+  - Obstacle
   - 
   - 
   - 
