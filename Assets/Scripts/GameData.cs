@@ -4,6 +4,8 @@ public class GameData : MonoBehaviour
 {
     public static GameData Instance { get; private set; }
 
+    public AudioPlayer audioPlayer {get; private set;}
+
 
     [Min(0f)]
     [SerializeField] float _speed;
@@ -31,8 +33,10 @@ public class GameData : MonoBehaviour
         }
         else
         {
+            audioPlayer = GetComponent<AudioPlayer>();
             Instance = this;
         }
+
     }
 
     public void GameOver()

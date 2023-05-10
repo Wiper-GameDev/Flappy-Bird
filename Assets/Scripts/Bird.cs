@@ -11,6 +11,8 @@ public class Bird : MonoBehaviour
     [SerializeField] float flapForce;
     [SerializeField] float maxFallSpeed;
 
+    GameObject handledPoint = null;
+
     // Components
     Rigidbody2D RB;
     Animator animator;
@@ -39,11 +41,13 @@ public class Bird : MonoBehaviour
 
     void Update()
     {
-        // Don't update anything if bird is dead
-        if (_isDead) return;
 
         // Update the vertical velocity to clamp the fall speed
         RB.velocity = new Vector2(RB.velocity.x, Mathf.Max(RB.velocity.y, -maxFallSpeed));
+
+
+        // Don't update anything if bird is dead
+        if (_isDead) return;
 
         // Play the appropriate animation based on the bird's orientation
         if ((315 >= transform.eulerAngles.z && transform.eulerAngles.z >= 275) || !RB.simulated)
@@ -71,6 +75,7 @@ public class Bird : MonoBehaviour
 
     void ApplyFlap()
     {
+        GameData.Instance.audioPlayer.PlayWing();
         // Calculate the force to be applied based on the flap force and current velocity
         var force = flapForce;
         force -= RB.velocity.y;
@@ -104,16 +109,42 @@ public class Bird : MonoBehaviour
         _pressedFlap = true;
     }
 
+    void Die()
+    {
+        _isDead = true;
+        _canFlap = false;
+        animator.Play(IDLE_ANIM);
+        GameData.Instance.GameOver();
+
+        GameData.Instance.audioPlayer.PlayHit();
+    }
+
     private void OnCollisionEnter2D(Collision2D other)
     {
         // Handle collisions with the ground
         if (other.gameObject.CompareTag("Ground"))
         {
-            _isDead = true;
             _canRotate = false;
-            _canFlap = false;
 
-            GameData.Instance.GameOver();
+            if (!_isDead)
+                Die();
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        // Handle collisions with the ground
+        if (other.gameObject.CompareTag("Pipe") && !_isDead)
+        {
+            Die();
+            GameData.Instance.audioPlayer.PlayDie();
+        }
+
+        if (!_isDead && other.gameObject.CompareTag("Point"))
+        {
+            if (other.gameObject == handledPoint) return;
+            handledPoint = other.gameObject;
+            GameData.Instance.audioPlayer.PlayPoint();
         }
     }
 }

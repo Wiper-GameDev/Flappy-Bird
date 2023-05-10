@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GroundHandler : MonoBehaviour
+public class GroundSpawner : MonoBehaviour
 {
     [SerializeField] GameObject ground;
     SpriteRenderer groundSprite;
