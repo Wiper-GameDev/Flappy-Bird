@@ -219,7 +219,7 @@ GameObject:
   - component: {fileID: 436267602}
   m_Layer: 0
   m_Name: Platform (1)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -505,7 +505,7 @@ GameObject:
   - component: {fileID: 1388882789}
   m_Layer: 0
   m_Name: Platform
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -705,9 +705,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.036399767, y: -0.0028000139}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.42160067
 --- !u!50 &1516206240
 Rigidbody2D:
   serializedVersion: 4
@@ -741,7 +741,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c745e15c04f73084eaa76ed15db60f2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxRotationUpward: 30
+  maxRotationUpward: 60
   maxRotationDownward: 90
   flapForce: 10
   maxFallSpeed: 14
@@ -899,7 +899,7 @@ GameObject:
   - component: {fileID: 2014153833}
   m_Layer: 0
   m_Name: Platform (2)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
