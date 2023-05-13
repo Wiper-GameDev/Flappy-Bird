@@ -1,47 +1,43 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GroundSpawner : MonoBehaviour
 {
-    [SerializeField] GameObject ground;
-    SpriteRenderer groundSprite;
-    [SerializeField] List<GameObject> groundObjects = new List<GameObject>();
-    Camera mainCamera;
-    // Start is called before the first frame update
-    void Awake()
+    [SerializeField] private GameObject groundPrefab;
+
+    [SerializeField] private List<GameObject> groundObjects = new List<GameObject>();
+    private Camera mainCamera;
+    private float groundWidth;
+    private void Awake()
     {
         mainCamera = Camera.main;
-        groundSprite = ground.GetComponent<SpriteRenderer>();
+        var size = groundPrefab.GetComponent<SpriteRenderer>().bounds.size;
+        groundWidth = size.x;
     }
 
-    Vector2 ComputeSpawnPosition()
+    private void SpawnGround(float positionX)
+    {
+        var firstGroundObject = groundObjects[0];
+        firstGroundObject.transform.position = new Vector2(positionX, firstGroundObject.transform.position.y);
+        groundObjects.RemoveAt(0);
+        groundObjects.Add(firstGroundObject);
+    }
+
+    private float ComputeSpawnPositionX()
     {
         var lastObject = groundObjects[groundObjects.Count - 1];
-        return new Vector2(lastObject.transform.position.x + groundSprite.bounds.size.x, lastObject.transform.position.y);
+        return lastObject.transform.position.x + groundWidth;
     }
 
-    // Update is called once per frame
-
-    void SpawnGround(Vector2 position)
+    private void Update()
     {
-        var go = Instantiate(ground, position, Quaternion.identity, gameObject.transform);
-        groundObjects.Add(go);
-    }
+        var firstGroundObject = groundObjects[0];
+        var firstGroundPosition = new Vector2(firstGroundObject.transform.position.x + groundWidth / 2, firstGroundObject.transform.position.y);
+        var viewportPoint = mainCamera.WorldToViewportPoint(firstGroundPosition);
 
-
-    void Update()
-    {
-        var groundObject = groundObjects[0];
-        var pos = new Vector2(groundObject.transform.position.x + groundSprite.bounds.size.x / 2, groundObject.transform.position.y);
-        var viewportPoint = mainCamera.WorldToViewportPoint(pos);
-
-        // Out of screen
         if (viewportPoint.x < 0)
         {
-            Destroy(groundObject);
-            groundObjects.RemoveAt(0);
-            SpawnGround(ComputeSpawnPosition());
+            SpawnGround(ComputeSpawnPositionX());
         }
     }
 }

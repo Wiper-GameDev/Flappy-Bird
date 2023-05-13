@@ -7,6 +7,7 @@ TagManager:
   - Ground
   - Pipe
   - Point
+  - Barrier
   layers:
   - Default
   - TransparentFX
@@ -52,4 +53,13 @@ TagManager:
     locked: 0
   - name: Bird
     uniqueID: 2753902585
+    locked: 0
+  - name: Ground
+    uniqueID: 402443551
+    locked: 0
+  - name: Barrier
+    uniqueID: 2960148413
+    locked: 0
+  - name: Overlay
+    uniqueID: 3247954091
     locked: 0

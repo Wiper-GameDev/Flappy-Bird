@@ -1,30 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class MoveObstacle : MonoBehaviour
 {
-    Rigidbody2D RB;
+    private Rigidbody2D rb;
 
-    void Awake()
+    private void Awake()
     {
-        RB = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void FixedUpdate()
     {
-
-    }
-
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        if (GameData.Instance.IsGameOver)
+        if (GameManager.Instance.IsGameOver)
         {
-            RB.velocity = Vector2.zero;
+            rb.velocity = Vector2.zero;
             return;
-        };
-        RB.velocity = new Vector2(-GameData.Instance.Speed, 0);
+        }
+
+        if (!GameManager.Instance.IsGameStarted && gameObject.CompareTag("Pipe"))
+        {
+            return;
+        }
+
+        rb.velocity = new Vector2(-GameManager.Instance.Speed, 0f);
     }
 }

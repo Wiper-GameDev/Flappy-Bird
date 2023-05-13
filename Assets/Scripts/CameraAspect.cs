@@ -4,6 +4,11 @@ public class CameraAspect : MonoBehaviour
 {
     private float targetAspectRatio = 9.0f / 16.0f;
 
+    void Awake() {
+       QualitySettings.vSyncCount = 0;
+       Application.targetFrameRate =  60; 
+    }
+
     void Start()
     {
         float screenAspectRatio = (float)Screen.width / (float)Screen.height;

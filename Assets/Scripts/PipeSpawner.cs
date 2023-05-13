@@ -14,27 +14,26 @@ public class PipeSpawner : MonoBehaviour
     SpriteRenderer pipeSprite;
     Camera mainCamera;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         mainCamera = Camera.main;
         pipeSprite = pipeGroupPrefab.GetComponentInChildren<SpriteRenderer>();
 
-        // Spawn at least 3 pipes
+        // Spawn at least 3 pipes at start
         SpawnRandomPipe(pipeSpawnPosition.position);
         SpawnRandomPipe(ComputeSpawnPosition());
         SpawnRandomPipe(ComputeSpawnPosition());
     }
 
-    Vector2 ComputeSpawnPosition(){
+    Vector2 ComputeSpawnPosition()
+    {
         var lastPipe = pipes[pipes.Count - 1];
         var randomX = Random.Range(4.5f, 6f);
         return new Vector2(lastPipe.transform.position.x + randomX, pipeSpawnPosition.position.y);
     }
 
-    void SpawnRandomPipe(Vector2 position)
+    void ChangePipeSettings(GameObject pipe)
     {
-        // Doesn't actually spawn randomly as of now
-        GameObject pipe = Instantiate(pipeGroupPrefab, position, Quaternion.identity, transform);
         var topPipe = pipe.transform.GetChild(0);
         var bottomPipe = pipe.transform.GetChild(1);
         var maxOffsetRange = Random.Range(minPipeOffsetVertical, maxPipeOffsetVertical);
@@ -42,13 +41,28 @@ public class PipeSpawner : MonoBehaviour
         var randomOffsetBottom = maxOffsetRange - randomOffsetTop;
 
         // Applying Offset
-        topPipe.transform.position = new Vector2(topPipe.transform.position.x, topPipe.transform.position.y + randomOffsetTop);
-        bottomPipe.transform.position = new Vector2(bottomPipe.transform.position.x, bottomPipe.transform.position.y - randomOffsetBottom);
+        topPipe.transform.localPosition = new Vector2(0, randomOffsetTop);
+        bottomPipe.transform.localPosition = new Vector2(0, -randomOffsetBottom);
 
         // Apply Offset to pipe group
         var randomPipeGroupOffset = Random.Range(-(maxPipeGroupOffsetPossibleBottom - randomOffsetBottom), maxPipeGroupOffsetPossibleTop - randomOffsetTop);
         pipe.transform.position = new Vector2(pipe.transform.position.x, pipe.transform.position.y + randomPipeGroupOffset);
+    }
 
+    void ChangeFirstPipePosition(Vector2 position)
+    {
+        var pipe = pipes[0];
+        pipe.transform.position = position;
+        ChangePipeSettings(pipe);
+        pipes.RemoveAt(0);
+        pipes.Add(pipe);
+    }
+
+    void SpawnRandomPipe(Vector2 position)
+    {
+        // Doesn't actually spawn randomly as of now
+        GameObject pipe = Instantiate(pipeGroupPrefab, position, Quaternion.identity, transform);
+        ChangePipeSettings(pipe);
         pipes.Add(pipe);
     }
 
@@ -62,9 +76,7 @@ public class PipeSpawner : MonoBehaviour
         // Out of screen
         if (viewportPoint.x < 0)
         {
-            Destroy(pipe);
-            pipes.RemoveAt(0);
-            SpawnRandomPipe(ComputeSpawnPosition());
+            ChangeFirstPipePosition(ComputeSpawnPosition());
         }
     }
 }
