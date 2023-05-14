@@ -50,7 +50,10 @@ public class Bird : MonoBehaviour
 
 
         // Taking Input only when game is not over
-        if (GameManager.Instance.IsGameOver) return;
+        if (GameManager.Instance.IsGameOver)
+        {
+            return;
+        };
 
         if (Input.touchCount > 0 || Input.GetMouseButtonDown(0))
             _pressedFlap = true;
@@ -66,21 +69,26 @@ public class Bird : MonoBehaviour
 
     void HandleRotation()
     {
-        // Exit early if rotation is not allowed
         if (!_canRotate) return;
 
-        // Calculate the target rotation based on the bird's velocity
-        var target = maxRotationUpward - sprite.transform.rotation.z;
-        var computed = _rb.velocity.y / flapForce * target;
+        float target = 0;
+        float rotationSpeed = 20f;
 
-        float rotationSpeedFactor = 70;
-        var smoothFactor = Mathf.Clamp01(rotationSpeedFactor * Time.deltaTime);
+        if (GameManager.Instance.IsGameOver || _rb.velocity.y < 0f)
+        {
+            target = -_rb.velocity.y / maxFallSpeed * maxRotationDownward;
+        }
 
-        // Smoothly rotate the bird sprite towards the target rotation
-        var newRotation = Quaternion.Euler(0, 0, computed);
-        sprite.transform.rotation = Quaternion.Slerp(sprite.transform.rotation, newRotation, smoothFactor);
+        else if (_rb.velocity.y > 0f)
+        {
+            target = _rb.velocity.y / flapForce * maxRotationUpward;
+            rotationSpeed = 40;
+        }
+
+        float smoothTime = Mathf.Clamp01(Time.smoothDeltaTime * rotationSpeed);
+
+        sprite.transform.rotation = Quaternion.Slerp(sprite.transform.rotation, Quaternion.Euler(0, 0, target), smoothTime);
     }
-
 
 
     private void FixedUpdate()
@@ -99,14 +107,19 @@ public class Bird : MonoBehaviour
     }
 
 
-    private void OnCollisionEnter2D(Collision2D other)
+    private void OnCollisionEnter2D(Collision2D other) // Always Ground and Pipes
     {
         GameManager.Instance.GameOver();
+
+        // Disable Rotation when we hit ground
+        if (other.gameObject.CompareTag("Ground"))
+        {
+            _canRotate = false;
+        }
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other) // Always A Score Point
     {
         GameManager.Instance.IncrementScore();
-        Debug.Log("Score???");
     }
 }
