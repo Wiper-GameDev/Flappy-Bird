@@ -27,20 +27,15 @@ public class Bird : MonoBehaviour
         _animator = sprite.GetComponent<Animator>();
     }
 
-    private void OnEnable()
-    {
-        GameManager.OnGameStart.AddListener(OnGameStart);
-    }
-
-    private void OnDisable()
-    {
-        GameManager.OnGameStart.RemoveListener(OnGameStart);
-    }
-
     private void Start()
     {
         // we don't want to fall onto ground or do any physics checking when we are not ready
         _rb.simulated = false;
+        GameManager.OnGameStart.AddListener(OnGameStart);
+    }
+    private void OnDestroy()
+    {
+        GameManager.OnGameStart.RemoveListener(OnGameStart);
     }
 
     private void Update()
@@ -104,11 +99,14 @@ public class Bird : MonoBehaviour
     }
 
 
-    private void OnCollisionEnter2D(Collision2D other) {
+    private void OnCollisionEnter2D(Collision2D other)
+    {
         GameManager.Instance.GameOver();
     }
 
-    private void OnTriggerEnter2D(Collider2D other) {
-        GameManager.Instance.IncrementScore();        
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        GameManager.Instance.IncrementScore();
+        Debug.Log("Score???");
     }
 }

@@ -1,18 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
-public class OverlayManager : MonoBehaviour
+public class CanvasManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] TextMeshProUGUI scoreText;
+
+
     void Start()
     {
-        
+        GameManager.OnScoreUpdate.AddListener(OnScoreUpdate);
     }
 
-    // Update is called once per frame
-    void Update()
+    void OnDestroy()
     {
-        
+        GameManager.OnScoreUpdate.RemoveListener(OnScoreUpdate);
+    }
+
+    void OnScoreUpdate(int score)
+    {
+        scoreText.text = score.ToString();
     }
 }

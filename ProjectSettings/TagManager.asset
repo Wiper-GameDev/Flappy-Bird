@@ -17,7 +17,7 @@ TagManager:
   - UI
   - Bird
   - Obstacle
-  - 
+  - Score
   - 
   - 
   - 
@@ -56,4 +56,7 @@ TagManager:
     locked: 0
   - name: Ground
     uniqueID: 928469409
+    locked: 0
+  - name: Canvas
+    uniqueID: 2717972587
     locked: 0

@@ -40,12 +40,11 @@ public class PipesManager : MonoBehaviour
         }
     }
 
-    void OnEnable()
-    {
+    void Start(){
         GameManager.OnGameRestarted.AddListener(ResetAllPipes);
     }
 
-    void OnDisable()
+    void OnDestroy()
     {
         GameManager.OnGameRestarted.RemoveListener(ResetAllPipes);
     }

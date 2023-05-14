@@ -4,12 +4,6 @@ using UnityEngine;
 using UnityEngine.Events;
 
 
-[System.Serializable]
-public class ScoreUpdateEvent : UnityEvent<int>
-{
-
-}
-
 
 
 public class GameManager : MonoBehaviour
@@ -57,7 +51,7 @@ public class GameManager : MonoBehaviour
         private set
         {
             _score = value;
-            OnScoreUpdate.Invoke(Score);
+            OnScoreUpdate.Invoke(_score);
         }
     }
 
@@ -87,7 +81,7 @@ public class GameManager : MonoBehaviour
 
         if (OnScoreUpdate == null)
         {
-            OnScoreUpdate = new ScoreUpdateEvent();
+            OnScoreUpdate = new UnityEvent<int>();
         }
 
 
@@ -139,6 +133,7 @@ public class GameManager : MonoBehaviour
     {
         IsGameOver = false;
         IsGameStarted = false;
+        Score = 0;
 
 
         OnGameRestarted.Invoke();
