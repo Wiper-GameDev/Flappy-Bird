@@ -18,7 +18,6 @@ public class PipesManager : MonoBehaviour
 
     [SerializeField] PipeConfiguration PipesGroupDist;
 
-    [SerializeField] PipeConfiguration PipesOffset;
     [SerializeField] PipeConfiguration PipeGroupVertOffset;
 
     private List<GameObject> pipes = new List<GameObject>();
@@ -55,7 +54,7 @@ public class PipesManager : MonoBehaviour
         Transform topPipe = pipe.transform.GetChild(0);
 
         // Pipes Offset
-        float pipesOffset = Random.Range(PipesOffset.min, PipesOffset.max);
+        float pipesOffset = 1.1f;
 
         topPipe.localPosition = new Vector2(0, pipesOffset);
 
