@@ -40,7 +40,8 @@ public class PipesManager : MonoBehaviour
         }
     }
 
-    void Start(){
+    void Start()
+    {
         GameManager.OnGameRestarted.AddListener(ResetAllPipes);
     }
 
@@ -81,6 +82,7 @@ public class PipesManager : MonoBehaviour
         foreach (GameObject pipe in pipes)
         {
             pipe.transform.position = spawnPosition;
+            SetupPipe(pipe);
             float dist = Random.Range(PipesGroupDist.min, PipesGroupDist.max);
             spawnPosition += new Vector2(pipesWidth + dist, 0f);
         }
