@@ -1,6 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+
+
+[System.Serializable]
+public struct BirdAudioClips
+{
+    public AudioClip Wing;
+    public AudioClip Hit;
+    public AudioClip Point;
+    public AudioClip Die;
+    public AudioClip Swoosh;
+}
 
 public class Bird : MonoBehaviour
 {
@@ -11,31 +23,42 @@ public class Bird : MonoBehaviour
 
     [SerializeField] private float flapForce;
     [SerializeField] private float maxFallSpeed;
+    [SerializeField] private float fallMulti;
+    [SerializeField] private float gravityScale;
     [SerializeField] private GameObject sprite;
+
 
 
     private Rigidbody2D _rb;
     private Animator _animator;
     private bool _canRotate = false;
+    private AudioSource audioSource;
 
     // Input
     private bool _pressedFlap = false;
+
+    // Animation Clips (We made a struct for easy to read)
+    [SerializeField] BirdAudioClips audioClips;
 
     private void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
         _animator = sprite.GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Start()
     {
         // we don't want to fall onto ground or do any physics checking when we are not ready
         _rb.simulated = false;
+        _rb.gravityScale = gravityScale;
         GameManager.OnGameStart.AddListener(OnGameStart);
+        GameManager.OnGameOver.AddListener(OnGameOver);
     }
     private void OnDestroy()
     {
         GameManager.OnGameStart.RemoveListener(OnGameStart);
+        GameManager.OnGameOver.RemoveListener(OnGameOver);
     }
 
     private void Update()
@@ -44,19 +67,53 @@ public class Bird : MonoBehaviour
         // Update the vertical velocity to clamp the fall speed
         _rb.velocity = new Vector2(_rb.velocity.x, Mathf.Max(_rb.velocity.y, -maxFallSpeed));
 
+
+        // Dynamic gravity for realistic flap and fall
+        if (_rb.velocity.y < 0)
+        {
+            _rb.gravityScale = gravityScale * fallMulti;
+        }
+        else
+        {
+            _rb.gravityScale = gravityScale;
+        }
+
+
+        HandleAnimation();
+
+
         // Handle Rotation
         HandleRotation();
 
+    }
 
-
-        // Taking Input only when game is not over
-        if (GameManager.Instance.IsGameOver)
+    private void HandleAnimation()
+    {
+        // Pause bird animation either if game is over, or player is going down
+        if (_rb.velocity.y <= -maxFallSpeed / 2 || GameManager.Instance.IsGameOver)
         {
-            return;
-        };
+            AnimatorStateInfo stateInfo = _animator.GetCurrentAnimatorStateInfo(0);
 
-        if (Input.touchCount > 0 || Input.GetMouseButtonDown(0))
-            _pressedFlap = true;
+            if (stateInfo.speed == 0f) return;
+
+            AnimationClip currentClip = _animator.GetCurrentAnimatorClipInfo(0)[0].clip;
+
+            // Get the total number of frames in the animation clip
+            int totalFrames = Mathf.RoundToInt(currentClip.length * currentClip.frameRate);
+
+            // Calculate the current frame
+            int currentFrame = Mathf.RoundToInt(stateInfo.normalizedTime * totalFrames) % totalFrames;
+
+            if (currentFrame == 1)
+            {
+                _animator.speed = 0f;
+            }
+        }
+
+        else
+        {
+            _animator.speed = 1f;
+        }
     }
 
     private void ApplyFlap()
@@ -64,6 +121,9 @@ public class Bird : MonoBehaviour
         var force = flapForce;
         force -= _rb.velocity.y;
         _rb.AddForce(Vector2.up * force, ForceMode2D.Impulse);
+
+        // Play Wing Audio
+        audioSource.PlayOneShot(audioClips.Wing);
     }
 
 
@@ -96,7 +156,14 @@ public class Bird : MonoBehaviour
         if (_pressedFlap)
             ApplyFlap();
 
+
         _pressedFlap = false;
+    }
+
+    public void OnFlapInput(InputAction.CallbackContext context)
+    {
+        if (!context.started) return;
+        _pressedFlap = true;
     }
 
     private void OnGameStart()
@@ -104,22 +171,41 @@ public class Bird : MonoBehaviour
         transform.position *= Vector2.right;
         _canRotate = true;
         _rb.simulated = true;
+
+        // Give a free flap to player
+        _pressedFlap = true;
     }
+
+    private void OnGameOver()
+    {
+        // Play Hit sound on either case
+        audioSource.PlayOneShot(audioClips.Hit);
+    }
+
 
 
     private void OnCollisionEnter2D(Collision2D other) // Always Ground and Pipes
     {
-        GameManager.Instance.GameOver();
+        if (!GameManager.Instance.IsGameOver)
+            GameManager.Instance.GameOver();
+
+
 
         // Disable Rotation when we hit ground
         if (other.gameObject.CompareTag("Ground"))
         {
             _canRotate = false;
         }
+        else
+        {
+            // We hit a pipe/barrier (Means got enough time to play die sound)
+            audioSource.PlayOneShot(audioClips.Die);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other) // Always A Score Point
     {
         GameManager.Instance.IncrementScore();
+        audioSource.PlayOneShot(audioClips.Point);
     }
 }

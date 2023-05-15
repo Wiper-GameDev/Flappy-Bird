@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 
 
@@ -84,6 +85,7 @@ public class GameManager : MonoBehaviour
 
 
 
+
 #if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
         Application.targetFrameRate = 60;
 #endif
@@ -108,12 +110,8 @@ public class GameManager : MonoBehaviour
 
     }
 
-    private void Update()
-    {
-        bool clickedOrTouched = Input.touchCount > 0 || Input.GetMouseButtonDown(0);
-
-        if (!clickedOrTouched) return;
-
+    public void OnClick(InputAction.CallbackContext context){
+        if (!context.started) return;
 
         if (!IsGameStarted)
         {

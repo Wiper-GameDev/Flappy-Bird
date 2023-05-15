@@ -20,7 +20,6 @@ public class GroundManager : MonoBehaviour
 
         // Add second ground object
         GameObject newGround = Instantiate(ground, ComputeSpawnPosition(), Quaternion.identity, transform);
-        Debug.Log(newGround);
         grounds.Add(newGround);
 
 
