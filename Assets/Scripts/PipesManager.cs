@@ -45,7 +45,7 @@ public class PipesManager : MonoBehaviour
         GameManager.OnGameRestarted.AddListener(ResetAllPipes);
     }
 
-    void OnDestroy()
+    void OnDestroy()variability
     {
         GameManager.OnGameRestarted.RemoveListener(ResetAllPipes);
     }
