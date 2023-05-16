@@ -101,10 +101,6 @@ public class PipesManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Return if game is not started, or is over already
-        if (!GameManager.Instance.IsGameStarted || GameManager.Instance.IsGameOver) return;
-
-
         GameObject pipe = pipes[0];
         // Optimized way maybe?
         Vector2 pipePosition = new Vector2(pipe.transform.position.x + pipesWidth / 2, 0);

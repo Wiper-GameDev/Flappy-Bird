@@ -41,7 +41,6 @@ public class GroundManager : MonoBehaviour
 
     void Update()
     {
-        if (GameManager.Instance.IsGameOver) return;
         GameObject ground = grounds[0];
         Vector2 groundPosition = new Vector2(ground.transform.position.x + groundWidth / 2, 0f);
 

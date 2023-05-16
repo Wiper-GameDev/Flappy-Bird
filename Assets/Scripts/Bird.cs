@@ -27,6 +27,8 @@ public class Bird : MonoBehaviour
     [SerializeField] private float gravityScale;
     [SerializeField] private GameObject sprite;
 
+    private bool _canControl = false;
+
 
 
     private Rigidbody2D _rb;
@@ -54,11 +56,13 @@ public class Bird : MonoBehaviour
         _rb.gravityScale = gravityScale;
         GameManager.OnGameStart.AddListener(OnGameStart);
         GameManager.OnGameOver.AddListener(OnGameOver);
+        GameManager.OnGameRestarted.AddListener(OnGameRestart);
     }
     private void OnDestroy()
     {
         GameManager.OnGameStart.RemoveListener(OnGameStart);
         GameManager.OnGameOver.RemoveListener(OnGameOver);
+        GameManager.OnGameRestarted.RemoveListener(OnGameRestart);
     }
 
     private void Update()
@@ -162,6 +166,8 @@ public class Bird : MonoBehaviour
 
     public void OnFlapInput(InputAction.CallbackContext context)
     {
+        // Don't register input either if game is not started, or game is over
+        if (!GameManager.Instance.IsGameStarted || GameManager.Instance.IsGameOver) return;
         if (!context.started) return;
         _pressedFlap = true;
     }
@@ -174,12 +180,30 @@ public class Bird : MonoBehaviour
 
         // Give a free flap to player
         _pressedFlap = true;
+
+        _canControl = true;
     }
 
     private void OnGameOver()
     {
         // Play Hit sound on either case
         audioSource.PlayOneShot(audioClips.Hit);
+        _canControl = false;
+    }
+
+
+    private void OnGameRestart(){
+        // Reset position
+        transform.position *= Vector2.right;
+
+        // Disable rigid body
+        _rb.simulated = false;
+
+        // Reset rotation
+        sprite.transform.rotation = Quaternion.identity;
+
+        // Reset animation speed
+        _animator.speed = 1f;
     }
 
 

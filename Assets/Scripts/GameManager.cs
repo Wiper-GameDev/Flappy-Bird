@@ -105,22 +105,15 @@ public class GameManager : MonoBehaviour
 
 
 
-    private void Start()
+    public void OnFlapInput(InputAction.CallbackContext context)
     {
-
-    }
-
-    public void OnClick(InputAction.CallbackContext context){
         if (!context.started) return;
+
+
 
         if (!IsGameStarted)
         {
             StartGame();
-        };
-
-        if (IsGameOver)
-        {
-            RestartGame();
         }
     }
 
@@ -133,7 +126,6 @@ public class GameManager : MonoBehaviour
 
 
         OnGameRestarted.Invoke();
-        StartGame();
     }
 
 
