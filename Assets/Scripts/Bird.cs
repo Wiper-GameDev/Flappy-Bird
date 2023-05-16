@@ -27,8 +27,6 @@ public class Bird : MonoBehaviour
     [SerializeField] private float gravityScale;
     [SerializeField] private GameObject sprite;
 
-    private bool _canControl = false;
-
 
 
     private Rigidbody2D _rb;
@@ -180,15 +178,12 @@ public class Bird : MonoBehaviour
 
         // Give a free flap to player
         _pressedFlap = true;
-
-        _canControl = true;
     }
 
     private void OnGameOver()
     {
         // Play Hit sound on either case
         audioSource.PlayOneShot(audioClips.Hit);
-        _canControl = false;
     }
 
 
@@ -219,6 +214,7 @@ public class Bird : MonoBehaviour
         if (other.gameObject.CompareTag("Ground"))
         {
             _canRotate = false;
+            GameManager.OnBirdHitGround.Invoke();
         }
         else
         {

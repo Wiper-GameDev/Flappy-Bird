@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     public static UnityEvent OnGameOver;
     public static UnityEvent OnGameRestarted;
     public static UnityEvent<int> OnScoreUpdate;
+    public static UnityEvent OnBirdHitGround;
     #endregion
 
     #region Getters/setters
@@ -54,6 +55,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public int BestScore { get; private set; }
+
     #endregion
 
 
@@ -83,6 +86,12 @@ public class GameManager : MonoBehaviour
             OnScoreUpdate = new UnityEvent<int>();
         }
 
+        if (OnBirdHitGround == null)
+        {
+            OnBirdHitGround = new UnityEvent();
+        }
+
+
 
 
 
@@ -93,12 +102,15 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
+        LoadBestScore();
         IsGameStarted = true;
         OnGameStart.Invoke();
     }
 
     public void GameOver()
     {
+        BestScore = Mathf.Max(Score, BestScore);
+        SaveBestScore();
         IsGameOver = true;
         OnGameOver.Invoke();
     }
@@ -132,5 +144,17 @@ public class GameManager : MonoBehaviour
     public void IncrementScore()
     {
         Score += 1;
+    }
+
+
+    void LoadBestScore()
+    {
+        BestScore = PlayerPrefs.GetInt("BestScore", 0);
+    }
+
+
+    void SaveBestScore()
+    {
+        PlayerPrefs.SetInt("BestScore", BestScore);
     }
 }

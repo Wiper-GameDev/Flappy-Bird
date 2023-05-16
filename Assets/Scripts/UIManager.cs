@@ -15,6 +15,7 @@ public class UIManager : MonoBehaviour
         GameManager.OnScoreUpdate.AddListener(OnScoreUpdate);
         GameManager.OnGameOver.AddListener(OnGameOver);
         GameManager.OnGameStart.AddListener(OnGameStart);
+        GameManager.OnBirdHitGround.AddListener(BirdHitGround);
 
         // Disable game over screen
         gameOverScreen.gameObject.SetActive(false);
@@ -25,6 +26,7 @@ public class UIManager : MonoBehaviour
         GameManager.OnScoreUpdate.RemoveListener(OnScoreUpdate);
         GameManager.OnGameOver.RemoveListener(OnGameOver);
         GameManager.OnGameStart.RemoveListener(OnGameStart);
+        GameManager.OnBirdHitGround.RemoveListener(BirdHitGround);
     }
 
     void OnScoreUpdate(int score)
@@ -38,6 +40,9 @@ public class UIManager : MonoBehaviour
 
     void OnGameOver(){
         hitEffect.StartEffect();
+    }
+
+    void BirdHitGround(){
         scoreText.gameObject.SetActive(false);
         gameOverScreen.gameObject.SetActive(true);
     }
