@@ -205,6 +205,7 @@ public class Bird : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other) // Always A Score Point
     {
+        if (GameManager.Instance.IsGameOver) return;
         GameManager.Instance.IncrementScore();
         audioSource.PlayOneShot(audioClips.Point);
     }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5424081202814017526}
   - component: {fileID: 5424081202814017524}
   - component: {fileID: 205463305008852211}
-  - component: {fileID: 2837367357868364090}
+  - component: {fileID: 7747244211533467467}
   m_Layer: 7
   m_Name: Pipe
   m_TagString: Pipes
@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8b48c1655a4d5a458d0a72ab911329f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!60 &2837367357868364090
+--- !u!60 &7747244211533467467
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -123,11 +123,11 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.26, y: 0}
-      - {x: -0.26, y: -0.24}
-      - {x: -0.24, y: -0.24}
-      - {x: -0.24, y: -3.1999998}
-      - {x: 0.24, y: -3.1999998}
-      - {x: 0.24, y: -0.24}
-      - {x: 0.26, y: -0.24}
-      - {x: 0.26, y: 0}
+    - - {x: -0.25, y: -0.01}
+      - {x: -0.25, y: -0.24}
+      - {x: -0.22999999, y: -0.24}
+      - {x: -0.22999999, y: -3.1999998}
+      - {x: 0.22999999, y: -3.1999998}
+      - {x: 0.22999999, y: -0.24}
+      - {x: 0.25, y: -0.24}
+      - {x: 0.25, y: -0.01}
