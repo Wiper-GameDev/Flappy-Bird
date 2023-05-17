@@ -27,6 +27,8 @@ public class Bird : MonoBehaviour
     [SerializeField] private float gravityScale;
     [SerializeField] private GameObject sprite;
 
+    [SerializeField] private GameObject knockedOutAnimation;
+
 
 
     private Rigidbody2D _rb;
@@ -172,6 +174,7 @@ public class Bird : MonoBehaviour
 
     private void OnGameStart()
     {
+        knockedOutAnimation.SetActive(false);
         transform.position *= Vector2.right;
         _canRotate = true;
         _rb.simulated = true;
@@ -187,7 +190,11 @@ public class Bird : MonoBehaviour
     }
 
 
-    private void OnGameRestart(){
+    private void OnGameRestart()
+    {
+        // Disable knock out animation
+        knockedOutAnimation.SetActive(false);
+        
         // Reset position
         transform.position *= Vector2.right;
 
@@ -213,6 +220,7 @@ public class Bird : MonoBehaviour
         // Disable Rotation when we hit ground
         if (other.gameObject.CompareTag("Ground"))
         {
+            knockedOutAnimation.SetActive(true);
             _canRotate = false;
             GameManager.OnBirdHitGround.Invoke();
         }
@@ -223,9 +231,9 @@ public class Bird : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other) // Always A Score Point
+    private void OnTriggerExit2D(Collider2D other) // Always A Score Point
     {
-        if (GameManager.Instance.IsGameOver) return;
+        if (GameManager.Instance.IsGameOver || !GameManager.Instance.IsGameStarted) return;
         GameManager.Instance.IncrementScore();
         audioSource.PlayOneShot(audioClips.Point);
     }

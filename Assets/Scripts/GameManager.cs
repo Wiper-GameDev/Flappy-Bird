@@ -8,13 +8,14 @@ using UnityEngine.InputSystem;
 public class GameManager : MonoBehaviour
 {
 
+    [SerializeField] GameOver gameOverScreen;
+    [SerializeField] private float _gameSpeed = 2.5f;
+
     public static GameManager Instance { get; private set; }
 
     private bool _isGameStarted;
     private bool _isGameOver;
-    [SerializeField] private float _gameSpeed = 2.5f;
     private int _score;
-
 
 
     # region Events
@@ -91,6 +92,8 @@ public class GameManager : MonoBehaviour
             OnBirdHitGround = new UnityEvent();
         }
 
+        LoadBestScore();
+
 
 
 
@@ -109,7 +112,7 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        BestScore = Mathf.Max(Score, BestScore);
+        gameOverScreen.UpdateScoreBoard();
         SaveBestScore();
         IsGameOver = true;
         OnGameOver.Invoke();
@@ -155,6 +158,6 @@ public class GameManager : MonoBehaviour
 
     void SaveBestScore()
     {
-        PlayerPrefs.SetInt("BestScore", BestScore);
+        PlayerPrefs.SetInt("BestScore", Mathf.Max(Score, BestScore));
     }
 }
