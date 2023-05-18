@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
 
 [System.Serializable]
@@ -168,7 +169,11 @@ public class Bird : MonoBehaviour
     {
         // Don't register input either if game is not started, or game is over
         if (!GameManager.Instance.IsGameStarted || GameManager.Instance.IsGameOver) return;
+        if (PauseMenu.IsGamePaused) return;
         if (!context.started) return;
+        // if (GameManager.IsPointerOverUIObject()) return;
+        if (UIClickCheck.IsUIElementClicked()) return;
+        Debug.Log("Handling Input");
         _pressedFlap = true;
     }
 

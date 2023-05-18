@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
 
 
@@ -123,8 +124,7 @@ public class GameManager : MonoBehaviour
     public void OnFlapInput(InputAction.CallbackContext context)
     {
         if (!context.started) return;
-
-
+        if (UIClickCheck.IsUIElementClicked()) return;
 
         if (!IsGameStarted)
         {
