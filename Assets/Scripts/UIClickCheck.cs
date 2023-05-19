@@ -14,13 +14,11 @@ public class UIClickCheck : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        Debug.Log("Clicked");
         clickElementsId.Add(gameObject.GetInstanceID());
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        Debug.Log("Removed");
         clickElementsId.Remove(gameObject.GetInstanceID());
     }
 }

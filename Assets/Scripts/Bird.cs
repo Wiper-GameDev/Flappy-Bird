@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.EventSystems;
 
 
 [System.Serializable]
@@ -66,9 +62,19 @@ public class Bird : MonoBehaviour
         GameManager.OnGameRestarted.RemoveListener(OnGameRestart);
     }
 
+    private void TakeInput()
+    {
+        if (!GameManager.IsScreenClickedOrTouched()) return;
+        if (PauseMenu.IsGamePaused) return;
+        if (GameManager.Instance.IsGameOver) return;
+        _pressedFlap = true;
+    }
+
     private void Update()
     {
         if (!GameManager.Instance.IsGameStarted) return;
+
+        
         // Update the vertical velocity to clamp the fall speed
         _rb.velocity = new Vector2(_rb.velocity.x, Mathf.Max(_rb.velocity.y, -maxFallSpeed));
 
@@ -83,13 +89,9 @@ public class Bird : MonoBehaviour
             _rb.gravityScale = gravityScale;
         }
 
-
+        TakeInput();
         HandleAnimation();
-
-
-        // Handle Rotation
         HandleRotation();
-
     }
 
     private void HandleAnimation()
@@ -165,18 +167,6 @@ public class Bird : MonoBehaviour
         _pressedFlap = false;
     }
 
-    public void OnFlapInput(InputAction.CallbackContext context)
-    {
-        // Don't register input either if game is not started, or game is over
-        if (!GameManager.Instance.IsGameStarted || GameManager.Instance.IsGameOver) return;
-        if (PauseMenu.IsGamePaused) return;
-        if (!context.started) return;
-        // if (GameManager.IsPointerOverUIObject()) return;
-        if (UIClickCheck.IsUIElementClicked()) return;
-        Debug.Log("Handling Input");
-        _pressedFlap = true;
-    }
-
     private void OnGameStart()
     {
         knockedOutAnimation.SetActive(false);
@@ -199,7 +189,7 @@ public class Bird : MonoBehaviour
     {
         // Disable knock out animation
         knockedOutAnimation.SetActive(false);
-        
+
         // Reset position
         transform.position *= Vector2.right;
 

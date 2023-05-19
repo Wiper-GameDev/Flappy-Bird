@@ -1,7 +1,5 @@
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.InputSystem;
-using UnityEngine.EventSystems;
 
 
 
@@ -120,16 +118,19 @@ public class GameManager : MonoBehaviour
     }
 
 
-
-    public void OnFlapInput(InputAction.CallbackContext context)
+    public static bool IsScreenClickedOrTouched()
     {
-        if (!context.started) return;
-        if (UIClickCheck.IsUIElementClicked()) return;
+        if (UIClickCheck.IsUIElementClicked()) return false;
+        return Input.GetMouseButtonDown(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == UnityEngine.TouchPhase.Began);
+    }
 
-        if (!IsGameStarted)
-        {
-            StartGame();
-        }
+
+    void Update()
+    {
+        if (!IsScreenClickedOrTouched()) return;
+        if (PauseMenu.IsGamePaused) return;
+        if (IsGameStarted) return;
+        StartGame();
     }
 
 
