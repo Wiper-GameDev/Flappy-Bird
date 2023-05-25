@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 
 
@@ -120,7 +121,18 @@ public class GameManager : MonoBehaviour
 
     public static bool IsScreenClickedOrTouched()
     {
-        if (UIClickCheck.IsUIElementClicked()) return false;
+        bool IsUIClicked = false;
+
+        IsUIClicked = EventSystem.current.IsPointerOverGameObject();
+
+        if (Input.touchCount > 0 && !IsUIClicked)
+        {
+            Touch touch = Input.touches[0];
+            IsUIClicked = EventSystem.current.IsPointerOverGameObject(touch.fingerId);
+        }
+
+        if (IsUIClicked) return false;
+
         return Input.GetMouseButtonDown(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == UnityEngine.TouchPhase.Began);
     }
 
