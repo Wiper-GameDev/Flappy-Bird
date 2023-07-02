@@ -4,15 +4,10 @@ using UnityEngine;
 
 public class FrameRateEnforcer : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        Application.targetFrameRate = 60;
-    }
+    void Start(){
+        QualitySettings.vSyncCount = 1; // Enable VSync
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        // Set the target frame rate to the maximum supported by the device
+        Application.targetFrameRate = Screen.currentResolution.refreshRate;
     }
 }
